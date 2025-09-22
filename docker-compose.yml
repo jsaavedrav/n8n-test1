@@ -1,33 +1,17 @@
-version: "3.7"
+version: "3.8"
 
 services:
   n8n:
     image: n8nio/n8n:latest
     container_name: n8n
-    restart: always
     ports:
       - "5678:5678"
     environment:
-      # Autenticación básica (usuario/contraseña para el UI)
-      - N8N_BASIC_AUTH_ACTIVE=true
-      - N8N_BASIC_AUTH_USER=admin
-      - N8N_BASIC_AUTH_PASSWORD=admin123
-
-      # Nombre y puerto del host
       - N8N_HOST=localhost
       - N8N_PORT=5678
-
-      # Zona horaria (ajústala a tu región)
+      - N8N_SECURE_COOKIE=false   # necesario para correr en local sin HTTPS
       - GENERIC_TIMEZONE=America/Santiago
       - TZ=America/Santiago
-
-      # Opcional: correo del owner del sistema
-      - N8N_USER_MANAGEMENT_EMAIL=admin@example.com
-
     volumes:
-      # Docker administra la persistencia
-      - n8n_data:/home/node/.n8n
-
-volumes:
-  n8n_data:
-
+      - ./.n8n_data:/home/node/.n8n
+    restart: unless-stopped
